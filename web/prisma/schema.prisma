@@ -34,9 +34,20 @@ model User {
 }
 
 // crie modelos novos!
+model Palestra {
+id String   @id @default(auto()) @map("_id") @db.ObjectId
+titulo String
+tema String
+descricao String
+duracao Int
+status String
+autorId String
+removidoEm  DateTime? 
+criadoEm DateTimegit
+atualizadoEm DateTime
 
-
-
+  @@map("palestra")
+}
 
 // evitar mexer daqui pra baixo
 // nesses 3 modelos do better auth
