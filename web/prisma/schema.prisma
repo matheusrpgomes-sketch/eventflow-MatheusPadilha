@@ -13,6 +13,11 @@ enum Role {
   ADMIN
   SUPER_ADMIN
 }
+enum StatusPalestra {
+  RASCUNHO
+  PUBLICADA
+  ARQUIVADA
+}
 
 model User {
   // nao mexer entre aqui >
@@ -27,16 +32,30 @@ model User {
   accounts      Account[]
   role          Role      @default(USER)
   // < e aqui
-
+  bio           String?
 
 
   @@map("user")
 }
 
 // crie modelos novos!
-
-
-
+model Palestra { 
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId 
+  titulo      String 
+  tema        String 
+  descricao   String 
+  duracao     Int                                
+  status      StatusPalestra @default(RASCUNHO) 
+ 
+  autorId     String                              
+  autorNome   String 
+ 
+  removidoEm  DateTime?                           
+  criadoEm    DateTime       @default(now()) 
+  atualizadoEm DateTime      @updatedAt 
+ 
+  @@map("palestra") 
+}
 
 // evitar mexer daqui pra baixo
 // nesses 3 modelos do better auth
