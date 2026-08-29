@@ -8,7 +8,10 @@ type AtualizarPalestraData = {
 
 export async function listarPublicadas() {
  const palestra = await prisma.palestra.findMany({
-    where: {status: "PUBLICADA", removidoEm: null},
+    where: {
+  status: "PUBLICADA",
+  OR: [{ removidoEm: null }, { removidoEm: { isSet: false } }]
+},
     orderBy: {criadoEm: "desc"}
     
  })

@@ -9,7 +9,7 @@ const rubik = Rubik({
 })
 
 export const metadata: Metadata = {
-  title: "monorepo base",
+  title: "EventFlow-MatheusPadilha",
   description: "Plataforma para olimpíadas científicas e reforço escolar",
 };
 
