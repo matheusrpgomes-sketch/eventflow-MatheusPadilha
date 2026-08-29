@@ -21,4 +21,3 @@ export async function NumeroDePalestra(autorId : string) {
 
     return numero;
 }
-ad
