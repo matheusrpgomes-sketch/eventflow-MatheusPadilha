@@ -2,6 +2,7 @@
  import { auth } from "@/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import BotaoRemover from "./_components/botaoremove";
 export default async function Painel() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) redirect("/login");
@@ -17,6 +18,7 @@ export default async function Painel() {
           <p>{palestra.tema}</p>
           <p>{palestra.duracao} minutos</p>
           <p>{palestra.status}</p>
+          <BotaoRemover id={palestra.id} />
         </div>
       ))}
     </div>
