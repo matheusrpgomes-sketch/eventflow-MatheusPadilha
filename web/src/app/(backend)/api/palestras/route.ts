@@ -18,22 +18,25 @@ export async function POST(request: NextRequest){
     try {
         const user = await getUserFromRequest(request);
         if (user instanceof NextResponse) return user;
-        const corpo = await validBody(request)
-        const validarresultado = criarPalestraSchema.safeParse(corpo));
+        const corpo = await validBody(request);
+        const validarresultado = criarPalestraSchema.safeParse(corpo);
         if(!validarresultado.success) {
             return returnInvalidDataErrors(validarresultado.error)
         }
         const ativas =  await NumeroDePalestra(user.id)
-        if (ativas >= 3)
-              return NextResponse.json( 
+        if (ativas >= 3) {
+              return NextResponse.json(
+        
         { error: `Limite de 3 palestras ativas atingido` }, 
-        { status: 409 } 
+        { status: 409 }
+              );
+            } 
         const adicionar = await criarPalestra({ 
       ...validarresultado.data, 
       autorId: user.id, 
       autorNome: user.name, 
         }); 
-    }
+    
        return NextResponse.json(adicionar, { status: 201 }); 
   } catch (error) { 
     if (error instanceof NextResponse) return error; 
