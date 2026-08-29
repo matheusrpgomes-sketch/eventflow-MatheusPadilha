@@ -5,6 +5,7 @@ import { auth } from "@/auth";
 import CarouselExample from "./_components/CarouselExample";
 import { listarPublicadas } from "@/app/(backend)/services/palestras";
 import type { Palestra } from "@/generated/prisma";
+import Link from "next/link";
 
 export default async function Home() {
   const session = await auth.api.getSession({
@@ -32,6 +33,7 @@ export default async function Home() {
   <p className="w-full flex items-center justify-center">Duração média: {media} minutos</p>
 
   {palestras.map((palestra) => (
+     <Link key={palestra.id} href={`/palestras/${palestra.id}`}>
     <div key={palestra.id} className="flex flex-col items-center gap-2 border rounded-lg p-4 my-4">
   <h2 className="text-xl font-semibold">{palestra.titulo}</h2>
   <p>{palestra.tema}</p>
@@ -39,6 +41,7 @@ export default async function Home() {
   <p>{palestra.autorNome}</p>
   <p>{palestra.descricao}</p>
 </div>
+</Link>
   ))}
 </main>
 
