@@ -6,9 +6,12 @@ type AtualizarPalestraData = {
   duracao?: number;
 };
 
-export async function listarPublicadas() {
+export async function listarPublicadas(tema?: string) {
  const palestra = await prisma.palestra.findMany({
-    where: {status: "PUBLICADA", removidoEm: null},
+    where: {
+  status: "PUBLICADA",tema: tema ?? undefined,
+  OR: [{ removidoEm: null }, { removidoEm: { isSet: false } }]
+},
     orderBy: {criadoEm: "desc"}
     
  })
@@ -49,4 +52,14 @@ export async function atualizarPalestra(id: string, dados: AtualizarPalestraData
 export async function removerPalestra(id: string) {
     return await prisma.palestra.update({where: {id},  data:{removidoEm : new Date()} });
 
+}
+
+export async function listaPalestraPalestrante(autorId: string) {
+  return await prisma.palestra.findMany({
+    where: {
+      autorId,
+      OR: [{ removidoEm: null }, { removidoEm: { isSet: false } }],
+    },
+    orderBy: { criadoEm: "desc" },
+  });
 }
