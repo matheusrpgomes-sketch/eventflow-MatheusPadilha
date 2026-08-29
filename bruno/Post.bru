@@ -1,0 +1,22 @@
+meta {
+  name: Post
+  type: http
+  seq: 1
+}
+
+patch {
+  url: {{baseUrl}}/palestras/6a924f960179a12acdb94853
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "titulo": "Titulo editado para testar"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
