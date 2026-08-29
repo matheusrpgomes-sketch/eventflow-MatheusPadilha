@@ -53,3 +53,13 @@ export async function removerPalestra(id: string) {
     return await prisma.palestra.update({where: {id},  data:{removidoEm : new Date()} });
 
 }
+
+export async function listaPalestraPalestrante(autorId: string) {
+  return await prisma.palestra.findMany({
+    where: {
+      autorId,
+      OR: [{ removidoEm: null }, { removidoEm: { isSet: false } }],
+    },
+    orderBy: { criadoEm: "desc" },
+  });
+}
