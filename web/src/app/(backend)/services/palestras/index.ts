@@ -21,3 +21,15 @@ export async function NumeroDePalestra(autorId : string) {
 
     return numero;
 }
+type CriarPalestraData = {
+  titulo: string;
+  tema: string;
+  descricao: string;
+  duracao: number;
+  autorId: string;
+  autorNome: string;
+};
+
+export async function criarPalestra(dados: CriarPalestraData) {
+  return await prisma.palestra.create({ data: dados });
+}
