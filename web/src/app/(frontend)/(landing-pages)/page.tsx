@@ -3,22 +3,27 @@ import Embarcar from "./_components/Embarcar";
 import { headers } from "next/headers";
 import { auth } from "@/auth";
 import CarouselExample from "./_components/CarouselExample";
-
+import { listarPublicadas } from "@/app/(backend)/services/palestras";
 export default async function Home() {
   const session = await auth.api.getSession({
     headers: await headers()
   });
   
   const isLogged = !!session?.user;
-
+  const palestras = await listarPublicadas();
   return (
     <div className="min-h-screen">
       <LandingPagesNav isLogged={isLogged} />
       
-      <main className="h-[70vh] w-full pt-20 pb-16 flex flex-col items-center justify-center text-center">
-        <h1 className="font-bold text-5xl text-pink-800">Página de Exemplo</h1>
-        <p className="pt-4 text-xl">Comece a editar seu site em <em className="text-pink-400">/app/(frontend)/(landing-pages)/page.tsx</em></p>
-      </main>
+     <main>
+       <h1 className="items-center justify-center">Palestras</h1>
+         {palestras.map((palestra) => (
+        <div key={palestra.id}>
+      <h2>{palestra.titulo}</h2>
+        <p>{palestra.tema}</p>
+    </div>
+  ))}
+    </main>
 
       <div className="w-full flex items-center justify-center">
         <Embarcar isLogged={isLogged} />
