@@ -7,14 +7,15 @@ import { listarPublicadas } from "@/app/(backend)/services/palestras";
 import type { Palestra } from "@/generated/prisma";
 import Link from "next/link";
 
-export default async function Home() {
+export default async function Home({ searchParams }: { searchParams: Promise<{ tema?: string }> }) {
   const session = await auth.api.getSession({
     headers: await headers()
   });
 
 
   const isLogged = !!session?.user;
-  const palestras = await listarPublicadas();
+  const { tema } = await searchParams;
+  const palestras = await listarPublicadas(tema);
   const total = palestras.length
     function calcularMedia(lista: Palestra[]) {
       if (lista.length > 0) {
@@ -23,6 +24,7 @@ export default async function Home() {
     return 0;
 }
   const media = calcularMedia(palestras);
+  const temas = [...new Set(palestras.map((p) => p.tema))]; 
   return (
     <div className="min-h-screen">
       <LandingPagesNav isLogged={isLogged} />
@@ -31,7 +33,12 @@ export default async function Home() {
   <h1 className="w-full flex items-center justify-center">Palestras</h1>
   <p className="w-full flex items-center justify-center">Total de palestras: {total}</p>
   <p className="w-full flex items-center justify-center">Duração média: {media} minutos</p>
-
+    <div className="flex gap-4 justify-center">
+  <Link href="/">Todos</Link>
+  {temas.map((t) => (
+    <Link key={t} href={`/?tema=${t}`}>{t}</Link>
+  ))}
+</div>
   {palestras.map((palestra) => (
      <Link key={palestra.id} href={`/palestras/${palestra.id}`}>
     <div key={palestra.id} className="flex flex-col items-center gap-2 border rounded-lg p-4 my-4">
