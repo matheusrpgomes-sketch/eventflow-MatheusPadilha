@@ -4,33 +4,59 @@ import { headers } from "next/headers";
 import { auth } from "@/auth";
 import CarouselExample from "./_components/CarouselExample";
 import { listarPublicadas } from "@/app/(backend)/services/palestras";
-export default async function Home() {
+import type { Palestra } from "@/generated/prisma";
+import Link from "next/link";
+
+export default async function Home({ searchParams }: { searchParams: Promise<{ tema?: string }> }) {
   const session = await auth.api.getSession({
     headers: await headers()
   });
-  
+
+
   const isLogged = !!session?.user;
-  const palestras = await listarPublicadas();
+  const { tema } = await searchParams;
+  const palestras = await listarPublicadas(tema);
+  const total = palestras.length
+    function calcularMedia(lista: Palestra[]) {
+      if (lista.length > 0) {
+      return lista.reduce((soma, p) => soma + p.duracao, 0) / lista.length;
+  }
+    return 0;
+}
+  const media = calcularMedia(palestras);
+  const temas = [...new Set(palestras.map((p) => p.tema))]; 
   return (
     <div className="min-h-screen">
       <LandingPagesNav isLogged={isLogged} />
       
      <main>
-       <h1 className="items-center justify-center">Palestras</h1>
-         {palestras.map((palestra) => (
-        <div key={palestra.id}>
-      <h2>{palestra.titulo}</h2>
-        <p>{palestra.tema}</p>
-    </div>
+  <h1 className="w-full flex items-center justify-center">Palestras</h1>
+  <p className="w-full flex items-center justify-center">Total de palestras: {total}</p>
+  <p className="w-full flex items-center justify-center">Duração média: {media} minutos</p>
+    <div className="flex gap-4 justify-center">
+  <Link href="/">Todos</Link>
+  {temas.map((t) => (
+    <Link key={t} href={`/?tema=${t}`}>{t}</Link>
   ))}
-    </main>
+</div>
+  {palestras.map((palestra) => (
+     <Link key={palestra.id} href={`/palestras/${palestra.id}`}>
+    <div key={palestra.id} className="flex flex-col items-center gap-2 border rounded-lg p-4 my-4">
+  <h2 className="text-xl font-semibold">{palestra.titulo}</h2>
+  <p>{palestra.tema}</p>
+  <p>{palestra.duracao} minutos</p>
+  <p>{palestra.autorNome}</p>
+  <p>{palestra.descricao}</p>
+</div>
+</Link>
+  ))}
+</main>
 
       <div className="w-full flex items-center justify-center">
-        <Embarcar isLogged={isLogged} />
+        
       </div>
 
-      <p className="text-center pt-8">um carousel de exemplo :)</p>
-      <CarouselExample />
+      
     </div>
   );
 }
