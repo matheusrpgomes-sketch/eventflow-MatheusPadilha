@@ -8,3 +8,5 @@ export const criarPalestraSchema = z.object({
 }); 
  
 export type CriarPalestraInput = z.infer<typeof criarPalestraSchema>; 
+export const atualizarPalestraSchema = criarPalestraSchema.partial();
+export type AtualizarPalestraInput = z.infer<typeof atualizarPalestraSchema>;

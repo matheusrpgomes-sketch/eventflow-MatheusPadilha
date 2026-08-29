@@ -1,0 +1,25 @@
+meta {
+  name: POST
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/palestras
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "titulo": "Introdução a testes automatizados",
+    "tema": "Qualidade",
+    "descricao": "Como começar a testar sem sofrer no dia a dia",
+    "duracao": 45
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
