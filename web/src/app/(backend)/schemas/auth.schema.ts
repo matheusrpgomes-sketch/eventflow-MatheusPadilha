@@ -13,6 +13,10 @@ const registerBaseObject = z.object({
     .max(50, "Nome deve ter no máximo 50 caracteres")
     .regex(/^[a-zA-ZÀ-ÿ\s]+$/, "Nome deve conter apenas letras e espaços")
     .transform(str => str.trim()),
+  bio: z
+    .string()
+    .max(500, "Bio deve ter no máximo 500 caracteres")
+    .optional(),
   email: emailSchema,
   password: passwordSchema,
   confirmPassword: z.string()
