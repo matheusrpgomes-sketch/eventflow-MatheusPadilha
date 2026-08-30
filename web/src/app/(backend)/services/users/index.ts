@@ -25,10 +25,9 @@ export async function updateUser(id: string, data: z.infer<typeof patchSchema>) 
   })
 }
 
-export async function deleteUser(id: string) {
-  await prisma.session.deleteMany({ where: { userId: id } });
-  await prisma.account.deleteMany({ where: { userId: id } });
-  return await prisma.user.delete({
-    where: { id }
-  })
+export async function removerUsuario(id: string) {
+  return await prisma.user.update({
+    where: { id },
+    data: { removidoEm: new Date() },
+  });
 }

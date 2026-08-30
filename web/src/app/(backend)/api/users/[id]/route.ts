@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { blockForbiddenRequests, getUserFromRequest, returnInvalidDataErrors, validBody, zodErrorHandler } from "@/utils/api/server";
 import { AllowedRoutes } from "@/types";
 import { idSchema, patchSchema } from "@/backend/schemas";
-import { deleteUser, findUserById, updateUser } from "@/backend/services/users";
+import { removerUsuario, findUserById, updateUser } from "@/backend/services/users";
 import { toErrorMessage } from "@/utils/api/toErrorMessage";
 
 const allowedRoles: AllowedRoutes = {
@@ -65,7 +65,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       return NextResponse.json({ error: "Acesso negado" }, { status: 403 });
     }
 
-    const user = await deleteUser(id);
+    const user = await removerUsuario(id);
     return NextResponse.json(user);
   } catch (error) {
     if (error instanceof NextResponse) {
